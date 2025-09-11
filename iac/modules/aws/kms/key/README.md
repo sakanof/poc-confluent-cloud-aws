@@ -1,24 +1,40 @@
-# Use Case: AWS KMS Key Provisioning (BYOK)
+# AWS KMS Key Module
 
-This use case demonstrates a direct provisioning of an AWS KMS key and alias for Bring Your Own Key (BYOK) integration with Confluent Cloud.  
-**No variables are used**; all inputs are hardcoded for simplicity.
+This module provisions an AWS KMS key and attaches an alias.
+
+## Features
+
+- Configurable description, deletion window, and key rotation.
+- Optional custom key policy.
+- Support for multi-region keys.
+- Tags and alias support.
 
 ## Usage
 
-1. Run Terraform:
+```hcl
+module "kms" {
+  source                  = "../../modules/aws/kms"
+  description             = "Confluent Cloud BYOK Key"
+  deletion_window_in_days = 30
+  enable_key_rotation     = true
+  policy                  = "" # Optionally set your policy JSON here
+  tags                    = {
+    "Environment" = "PoC"
+    "Service"     = "Confluent"
+  }
+  multi_region            = false
+  alias_name              = "alias/confluent-byok"
+}
+```
 
-   ```bash
-   terraform init
-   terraform plan
-   terraform apply
-   ```
+## Outputs
 
-2. Check Outputs:
-   - `kms_key_id`: The KMS key ID.
-   - `kms_key_arn`: The KMS key ARN.
-   - `kms_alias_arn`: The KMS key alias ARN.
-   - `kms_alias_name`: The KMS key alias name.
+- `kms_key_id`: The KMS key ID
+- `kms_key_arn`: The KMS key ARN
+- `kms_alias_arn`: The KMS alias ARN
+- `kms_alias_name`: The KMS alias name
 
-## Next Steps
+## References
 
-Use the `kms_key_arn` output for Confluent Cloud BYOK integration.
+- [Terraform aws_kms_key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key)
+- [Terraform aws_kms_alias](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias)
