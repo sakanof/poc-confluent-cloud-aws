@@ -13,7 +13,7 @@ provider "aws" {
 }
 
 module "kms" {
-  source                  = "../../../../../modules/aws/kms"
+  source                  = "../../../../../modules/aws/kms/key"
   description             = "Confluent Cloud BYOK Key"
   deletion_window_in_days = 30
   enable_key_rotation     = true
