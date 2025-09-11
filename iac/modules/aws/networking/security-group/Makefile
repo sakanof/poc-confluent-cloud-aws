@@ -1,0 +1,1 @@
+include ${IAC_DIR}/terraform.mk
