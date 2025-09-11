@@ -1,3 +1,7 @@
+# Ignore local environment variable files (contain secrets/config values,
+# should not be committed to version control)
+.envs
+
 # Local .terraform directories
 .terraform/
 
@@ -22,6 +26,10 @@ override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
+
+# Ignore Terraform dependency lock file (specific to provider versions,
+# not needed in version control if you want flexibility across environments)
+.terraform.lock.hcl
 
 # Ignore transient lock info files created by terraform apply
 .terraform.tfstate.lock.info

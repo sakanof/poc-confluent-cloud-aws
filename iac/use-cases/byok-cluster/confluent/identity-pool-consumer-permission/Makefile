@@ -1,1 +1,1 @@
-include ${TERRAFORM_DIR}/terraform.mk
+include ${IAC_DIR}/terraform.mk

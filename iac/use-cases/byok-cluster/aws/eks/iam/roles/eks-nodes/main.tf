@@ -1,5 +1,5 @@
 module "eks_cluster_node_role" {
-  source                = "../../../../../../../../modules/aws/iam/role/"
+  source                = "../../../../../../../modules/aws/iam/role/"
 
   name                  = "EKSNodesRole-${var.aws_account}-${var.eks_cluster_name}"
   description           = "IAM Role EKS Nodes Cluster."
