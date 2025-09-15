@@ -2,6 +2,14 @@ output "vpc_id" {
   value = module.vpc.vpc_id
 }
 
+output "azs" {
+  value = module.vpc.azs
+}
+
+output "private_azs_map" {
+  value = module.vpc.private_azs_map
+}
+
 output "public_subnets" {
   value = [
     module.vpc.public_subnet_az1_id,

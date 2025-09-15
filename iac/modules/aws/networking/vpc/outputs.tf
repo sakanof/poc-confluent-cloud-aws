@@ -18,6 +18,22 @@ output "azs" {
   ]
 }
 
+output "private_azs_map" {
+  description = "Map of AZ name to subnet ID"
+  value = zipmap(
+    [
+      data.aws_availability_zones.azs.zone_ids[0],
+      data.aws_availability_zones.azs.zone_ids[1],
+      data.aws_availability_zones.azs.zone_ids[2],
+    ],
+    [
+      aws_subnet.private_az1.id,
+      aws_subnet.private_az2.id,
+      aws_subnet.private_az3.id,
+    ]
+  )
+}
+
 output "public_subnets" {
   value = [
     aws_subnet.public_az1.id,

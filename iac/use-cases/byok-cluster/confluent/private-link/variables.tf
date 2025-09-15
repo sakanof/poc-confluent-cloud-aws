@@ -1,5 +1,6 @@
 variable "aws_account_id" {
   description   = "AWS Account ID for Confluent Private Link"
+  default       = "891377173254"
   type          = string
 }
 

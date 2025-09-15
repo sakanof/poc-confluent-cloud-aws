@@ -3,5 +3,5 @@ output "id" {
 }
 
 output "roles" {
-  value       = confluent_byok_key.this.roles
+  value       = confluent_byok_key.this.aws[0].roles
 }

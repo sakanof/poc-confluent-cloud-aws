@@ -10,7 +10,7 @@ variable "region" {
 
 variable "zones" {
   description = "Zones for the Confluent Cloud network"
-  type        = string
+  type        = list(string)
 }
 
 variable "environment_id" {

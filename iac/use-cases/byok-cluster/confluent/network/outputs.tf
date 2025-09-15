@@ -8,9 +8,13 @@ output "id" {
   value       = module.network.id
 }
 
-output "private_link_service_aliases" {
+output "cloud" {
+  value       = module.network.cloud
+}
+
+output "private_link_endpoint_service" {
   description = "Confluent Private Link"
-  value       = module.network.private_link_service_aliases
+  value       = module.network.private_link_endpoint_service
 }
 
 output "dns_domain" {

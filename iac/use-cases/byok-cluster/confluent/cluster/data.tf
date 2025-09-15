@@ -1,7 +1,7 @@
 data "terraform_remote_state" "byok" {
   backend = "local"
   config = {
-    path = "../byok/terraform.tfstate"
+    path = "../byok-aws/terraform.tfstate"
   }
 }
 

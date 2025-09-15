@@ -8,6 +8,6 @@ data "terraform_remote_state" "confluent_environment" {
 data "terraform_remote_state" "aws_vpc" {
   backend = "local"
   config = {
-    path = "../../../aws/networking/vpc/terraform.tfstate"
+    path = "../../aws/networking/vpc/terraform.tfstate"
   }
 }

@@ -8,14 +8,13 @@ terraform {
   }
 }
 
-provider "aws" {
-  region = "us-east-1"
-}
-
 module "privatelink" {
-  source                   = "../../../../../modules/aws/networking/private-link"
-  vpc_id                   = data.terraform_remote_state.vpc.outputs.vpc_id
-  privatelink_service_name = "com.amazonaws.us-east-1.vpce.amazonaws.com"
-  subnets_to_privatelink   = data.terraform_remote_state.vpc.private_subnets
-  dns_domain               = "confluentcloud.poc.internal"
+  source                            = "../../../../../modules/aws/networking/private-link"
+
+  bootstrap_prefix                  = data.terraform_remote_state.confluent_cluster.outputs.bootstrap_endpoint
+  confluent_dns_domain              = data.terraform_remote_state.confluent_network.outputs.dns_domain
+  vpc_id                            = data.terraform_remote_state.vpc.outputs.vpc_id
+  private_link_endpoint_service     = data.terraform_remote_state.confluent_network.outputs.private_link_endpoint_service
+
+  subnets_to_privatelink            = data.terraform_remote_state.vpc.outputs.private_azs_map
 }

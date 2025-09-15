@@ -8,9 +8,13 @@ output "id" {
   value       = confluent_network.this.id
 }
 
-output "private_link_service_aliases" {
+output "cloud" {
+  value       = confluent_network.this.cloud
+}
+
+output "private_link_endpoint_service" {
   description = "Confluent Private Link"
-  value       = confluent_network.this.azure[0].private_link_service_aliases
+  value       = confluent_network.this.aws[0].private_link_endpoint_service
 }
 
 output "dns_domain" {

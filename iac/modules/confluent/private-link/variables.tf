@@ -12,7 +12,7 @@ variable "network_id" {
   description = "ID of Confluent Network."
   type        = string
 }
-variable "azure_subscription_id" {
-  description = "Azure Subscription ID for Private Link access"
+
+variable "aws_account" {
   type        = string
 }

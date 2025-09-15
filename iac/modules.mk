@@ -23,6 +23,14 @@ apply:
 		$(MAKE) apply || exit 1; \
 	done
 
+.PHONY: clean
+clean:
+	@CUR_DIR=$$(pwd); \
+	for D in ${MODULES}; do \
+	    cd "$$CUR_DIR/$$D"; \
+		$(MAKE) clean || exit 1; \
+	done
+
 # Iterate in the reverse order to destroy the modules
 .PHONY: destroy
 destroy:

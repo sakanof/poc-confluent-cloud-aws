@@ -5,8 +5,8 @@ variable "environment" {
 }
 
 variable "region" {
-  description   = "Azure region where resources will be deployed"
-  default       = "eastus2"
+  description   = "AWS region where resources will be deployed"
+  default       = "us-east-1"
   type          = string
 }
 

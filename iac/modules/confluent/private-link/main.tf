@@ -9,9 +9,13 @@ resource "confluent_private_link_access" "this" {
     id = var.network_id
   }
 
-  azure {
-    subscription = var.azure_subscription_id
+  aws {
+    account = var.aws_account
   }
+
+  # azure {
+  #   subscription = var.azure_subscription_id
+  # }
 
   # lifecycle {
   #   prevent_destroy = true

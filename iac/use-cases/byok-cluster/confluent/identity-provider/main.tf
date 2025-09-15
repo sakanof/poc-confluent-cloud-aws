@@ -3,6 +3,5 @@ module "identity_provider" {
 
   name                  = var.name
   description           = var.name
-  tenant_id             = data.terraform_remote_state.resource_group.outputs.tenant_id
-  application_client_id = data.terraform_remote_state.app_registration.outputs.client_id
+  issuer        = data.terraform_remote_state.eks.outputs.oidc_provider_url
 }

@@ -45,3 +45,14 @@ MODULES = aws/kms/key										\
 		  # confluent/identity-pool-consumer					\
 		  # confluent/identity-pool-consumer-permission
 
+
+MODULES = aws/kms/key										\
+		  confluent/byok-aws								\
+		  aws/kms/key-policy								\
+		  aws/networking/vpc								\
+		  aws/networking/security-groups/ssh-access			\
+		  confluent/environment								\
+		  confluent/network									\
+		  confluent/private-link							\
+		  confluent/cluster									\
+		  aws/networking/private-link

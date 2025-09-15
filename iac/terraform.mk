@@ -26,6 +26,12 @@ plan: validate
 apply: plan
 	${TERRAFORM_CMD} apply ${OUTPUT_PLAN_FILENAME}
 
+.PHONY: clean
+clean:
+	rm terraform*
+	rm -rf .terraform*
+	rm plan.tfplan
+
 .PHONY: destroy
 destroy:
 	${TERRAFORM_CMD} destroy -auto-approve

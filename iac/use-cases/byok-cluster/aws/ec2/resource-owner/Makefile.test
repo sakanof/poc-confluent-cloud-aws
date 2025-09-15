@@ -1,0 +1,138 @@
+# =============================================================
+# Configuration Variables
+# =============================================================
+
+# SSH Key (must be set in the environment)
+ifndef SSH_KEY
+$(error SSH_KEY is not set. Export or set it before running targets.)
+endif
+
+APPLICATION_NAMESPACE := poc-confluent-cloud-aws
+SERVICE_ACCOUNT_READ  := poc-confluent-cloud-aws-read
+SERVICE_ACCOUNT_WRITE := poc-confluent-cloud-aws-write
+
+# Terraform Outputs
+BOOTSTRAP_SERVERS_SASL_IAM := $(shell jq -r '.outputs.bootstrap_endpoint.value' ../../../confluent/cluster//terraform.tfstate)
+
+EC2_PRODUCER_DNS       := $(shell jq -r '.outputs.public_dns.value' ../iac/modules/ec2/producer/terraform.tfstate)
+EC2_CONSUMER_DNS       := $(shell jq -r '.outputs.public_dns.value' ../iac/modules/ec2/consumer/terraform.tfstate)
+EC2_RESOURCE_OWNER_DNS := $(shell jq -r '.outputs.public_dns.value' ./terraform.tfstate)
+EC2_MSK_CONSOLE        := $(shell jq -r '.outputs.public_dns.value' ../iac/modules/ec2/msk-console/terraform.tfstate)
+
+EKS_CLUSTER_NAME  := $(shell jq -r '.outputs.id.value' ../iac/modules/eks/eks/terraform.tfstate)
+EKS_WRITE_ROLE_ARN := $(shell jq -r '.outputs.arn.value' ../iac/modules/eks/iam/subscriber-write/role/terraform.tfstate)
+EKS_READ_ROLE_ARN  := $(shell jq -r '.outputs.arn.value' ../iac/modules/eks/iam/subscriber-read/role/terraform.tfstate)
+
+# Default topic and group name (override if needed)
+TOPIC_NAME ?= tname
+GROUP_NAME ?= gname
+
+# SSH Command
+SSH_CMD = ssh -i "${SSH_KEY}" ec2-user@
+
+# =============================================================
+# EC2 Targets
+# =============================================================
+
+.PHONY: run-ec2-producer run-ec2-consumer run-ec2-msk-console create-topic \
+        ssh-ec2-resource-owner ssh-ec2-producer ssh-ec2-consumer ssh-ec2-msk-console
+
+run-ec2-producer:
+	@$(SSH_CMD)"${EC2_PRODUCER_DNS}" \
+		"/opt/kafka/bin/kafka-console-producer.sh \
+		--topic ${TOPIC_NAME} \
+		--bootstrap-server ${BOOTSTRAP_SERVERS_SASL_IAM} \
+		--producer.config /opt/kafka/config/client_sasl_iam.properties"
+
+run-ec2-consumer:
+	@$(SSH_CMD)"${EC2_CONSUMER_DNS}" \
+		"/opt/kafka/bin/kafka-console-consumer.sh \
+		--topic ${TOPIC_NAME} \
+		--group ${GROUP_NAME} \
+		--bootstrap-server ${BOOTSTRAP_SERVERS_SASL_IAM} \
+		--consumer.config /opt/kafka/config/client_sasl_iam.properties"
+
+run-ec2-msk-console:
+	@$(SSH_CMD)"${EC2_MSK_CONSOLE}" sudo docker-compose -f /opt/docker-compose.yml up
+
+create-topic:
+	@$(SSH_CMD)"${EC2_RESOURCE_OWNER_DNS}" \
+		"/opt/kafka/bin/kafka-topics.sh \
+		--create \
+		--topic ${TOPIC_NAME} \
+		--partitions 2 \
+		--replication-factor 2 \
+		--bootstrap-server ${BOOTSTRAP_SERVERS_SASL_IAM}"
+
+# SSH Shortcuts
+ssh-ec2-resource-owner:
+	@$(SSH_CMD)"${EC2_RESOURCE_OWNER_DNS}"
+
+ssh-ec2-producer:
+	@$(SSH_CMD)"${EC2_PRODUCER_DNS}"
+
+ssh-ec2-consumer:
+	@$(SSH_CMD)"${EC2_CONSUMER_DNS}"
+
+ssh-ec2-msk-console:
+	@$(SSH_CMD)"${EC2_MSK_CONSOLE}"
+
+# =============================================================
+# EKS and IRSA Targets
+# =============================================================
+
+.PHONY: setup-kubeconfig create-namespace create-service-accounts eks-setup \
+        get-service-accounts delete-service-accounts deploy-aws-cli-clients \
+        delete-aws-cli-clients check-aws-cli-identities create-client-properties-configmap \
+        deploy-kafka-clients delete-kafka-clients check-kafka-clients-identities \
+        run-kafka-producer run-kafka-consumer
+
+setup-kubeconfig:
+	aws eks update-kubeconfig --region us-east-1 --name ${EKS_CLUSTER_NAME}
+
+create-namespace:
+	kubectl create namespace ${APPLICATION_NAMESPACE}
+
+create-service-accounts:
+	EKS_WRITE_ROLE_ARN=${EKS_WRITE_ROLE_ARN} \
+	EKS_READ_ROLE_ARN=${EKS_READ_ROLE_ARN} \
+	envsubst < ./deployments/service-account.yml | kubectl apply -f -
+
+eks-setup: setup-kubeconfig create-namespace create-service-accounts
+
+get-service-accounts:
+	kubectl get sa --namespace ${APPLICATION_NAMESPACE} ${SERVICE_ACCOUNT_READ} -o yaml
+	kubectl get sa --namespace ${APPLICATION_NAMESPACE} ${SERVICE_ACCOUNT_WRITE} -o yaml
+
+delete-service-accounts:
+	kubectl delete sa --namespace ${APPLICATION_NAMESPACE} ${SERVICE_ACCOUNT_READ}
+	kubectl delete sa --namespace ${APPLICATION_NAMESPACE} ${SERVICE_ACCOUNT_WRITE}
+
+deploy-aws-cli-clients:
+	envsubst < ./deployments/aws-cli.yml | kubectl apply -f -
+
+delete-aws-cli-clients:
+	kubectl delete pod --namespace ${APPLICATION_NAMESPACE} aws-cli-read aws-cli-write
+
+check-aws-cli-identities:
+	kubectl exec --namespace ${APPLICATION_NAMESPACE} -it aws-cli-read -- aws sts get-caller-identity
+	kubectl exec --namespace ${APPLICATION_NAMESPACE} -it aws-cli-write -- aws sts get-caller-identity
+
+create-client-properties-configmap:
+	kubectl apply -f ./deployments/client-properties.yml
+
+deploy-kafka-clients:
+	envsubst < ./deployments/kafka-clients.yml | kubectl apply -f -
+
+delete-kafka-clients:
+	kubectl delete pod --namespace ${APPLICATION_NAMESPACE} kafka-producer kafka-consumer
+
+check-kafka-clients-identities:
+	kubectl exec --namespace ${APPLICATION_NAMESPACE} -it kafka-producer -- env | grep AWS_ROLE_ARN
+	kubectl exec --namespace ${APPLICATION_NAMESPACE} -it kafka-consumer -- env | grep AWS_ROLE_ARN
+
+run-kafka-producer:
+	kubectl exec --namespace ${APPLICATION_NAMESPACE} -it kafka-producer -- bash
+
+run-kafka-consumer:
+	kubectl exec --namespace ${APPLICATION_NAMESPACE} -it kafka-consumer -- bash

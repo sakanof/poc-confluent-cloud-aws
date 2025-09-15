@@ -7,16 +7,18 @@ data "aws_availability_zone" "privatelink" {
   zone_id  = each.key
 }
 
-locals {
-  network_id = split(".", var.dns_domain)[0]
-}
+# locals {
+#   bootstrap_prefix = split(".", confluent_kafka_cluster.dedicated.bootstrap_endpoint)[0]
+# }
 
 resource "aws_security_group" "privatelink" {
-  name        = "ccloud-privatelink_${local.network_id}_${var.vpc_id}"
-  description = "Confluent Cloud Private Link minimal security group for ${var.dns_domain} in ${var.vpc_id}"
-  vpc_id      = data.aws_vpc.privatelink.id
+  # Ensure that SG is unique, so that this module can be used multiple times within a single VPC
+  name        = "ccloud-privatelink_${var.bootstrap_prefix}_${var.vpc_id}-sg"
+  description = "Confluent Cloud Private Link minimal security group for ${var.bootstrap_prefix} in ${var.vpc_id}"
+  vpc_id      = var.vpc_id
 
   ingress {
+    # only necessary if redirect support from http/https is desired
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -43,19 +45,23 @@ resource "aws_security_group" "privatelink" {
 }
 
 resource "aws_vpc_endpoint" "privatelink" {
-  vpc_id             = data.aws_vpc.privatelink.id
-  service_name       = var.privatelink_service_name
-  vpc_endpoint_type  = "Interface"
-  security_group_ids = [aws_security_group.privatelink.id]
-  subnet_ids         = [for zone, subnet_id in var.subnets_to_privatelink : subnet_id]
+  vpc_id            = var.vpc_id
+  service_name      = var.private_link_endpoint_service
+  vpc_endpoint_type = "Interface"
+
+  security_group_ids = [
+    aws_security_group.privatelink.id,
+  ]
+
+  subnet_ids          = [for zone, subnet_id in var.subnets_to_privatelink : subnet_id]
   private_dns_enabled = false
 }
 
 resource "aws_route53_zone" "privatelink" {
-  name = var.dns_domain
+  name = var.confluent_dns_domain
 
   vpc {
-    vpc_id = data.aws_vpc.privatelink.id
+    vpc_id = var.vpc_id
   }
 }
 

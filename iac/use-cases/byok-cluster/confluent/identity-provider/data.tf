@@ -1,13 +1,6 @@
-data "terraform_remote_state" "app_registration" {
+data "terraform_remote_state" "eks" {
   backend = "local"
   config = {
-    path = "../../azure/app-registration/terraform.tfstate"
-  }
-}
-
-data "terraform_remote_state" "resource_group" {
-  backend = "local"
-  config = {
-    path = "../../azure/resource-group/terraform.tfstate"
+    path = "../../aws/eks/cluster/terraform.tfstate"
   }
 }
