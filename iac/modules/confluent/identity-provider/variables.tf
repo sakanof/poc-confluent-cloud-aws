@@ -1,15 +1,14 @@
 variable "name" {
-  type          = string
+  type        = string
+  description = "The name of the identity provider."
 }
 
 variable "description" {
-  type          = string
+  type        = string
+  description = "A brief description of the identity provider."
 }
 
-variable "tenant_id" {
-  type          = string
-}
-
-variable "application_client_id" {
-  type          = string
+variable "issuer" {
+  type        = string
+  description = "The issuer URL for the identity provider."
 }

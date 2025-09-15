@@ -35,6 +35,16 @@ variable "client_type" {
   description   = "Client Type (`resource-owner`, `producer`, `consumer` and `monitoring`)."
 }
 
+variable "client_key" {
+  type          = string
+  description   = "The client key used for authentication."
+}
+
+variable "client_secret" {
+  type          = string
+  description   = "The client secret used for authentication."
+}
+
 variable "tag_name" {
   type          = string
   description   = "Tag Name."

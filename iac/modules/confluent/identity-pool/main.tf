@@ -5,6 +5,6 @@ resource "confluent_identity_pool" "this" {
 
   display_name      = var.name
   identity_claim    = "claims.sub"
-  filter            = "claims.aud==\"${var.application_client_id}\""
+  filter            = "claims.aud==\"sts.amazonaws.com\" && claims.sub==\"system:serviceaccount:${var.namespace}:${var.service_account}\""
   description       = "asdasd"
 }

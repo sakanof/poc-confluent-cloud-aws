@@ -33,11 +33,11 @@ MODULES = aws/kms/key										\
 		  aws/networking/private-link						\
 		  # confluent/cluster									\
 		  # aws/eks											\
+		  # confluent/identity-provider						\
 		  # IRSA												\
 		  # azure/app-registration 							\
 		  # azure/managed-identity							\
 		  # azure/federated-managed-identity					\
-		  # confluent/identity-provider						\
 		  # confluent/identity-pool-topic-owner				\
 		  # confluent/identity-pool-topic-owner-permission	\
 		  # confluent/identity-pool-producer					\
@@ -55,4 +55,15 @@ MODULES = aws/kms/key										\
 		  confluent/network									\
 		  confluent/private-link							\
 		  confluent/cluster									\
-		  aws/networking/private-link
+		  aws/networking/private-link						\
+		  aws/eks											\
+		  confluent/identity-provider						\
+		  confluent/identity-pool-topic-owner				\
+		  confluent/identity-pool-topic-owner-permission	\
+		  confluent/identity-pool-producer					\
+		  confluent/identity-pool-producer-permission		\
+		  confluent/identity-pool-consumer					\
+		  confluent/identity-pool-consumer-permission
+
+# aws/iam/roles/subscriber-read						\
+# aws/iam/roles/subscriber-write					\

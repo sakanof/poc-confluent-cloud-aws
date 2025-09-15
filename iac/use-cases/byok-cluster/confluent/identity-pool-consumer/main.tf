@@ -3,5 +3,6 @@ module "identity_pool" {
 
   name                  = var.name
   identity_provider_id  = data.terraform_remote_state.identity_provider.outputs.id
-  application_client_id = data.terraform_remote_state.application_registration.outputs.client_id
+  namespace             = "test"
+  service_account       = "consumer"
 }
