@@ -1,6 +1,6 @@
 variable "name" {
   description   = "Name of the Identity Provider."
-  default       = "azure-aks"
+  default       = "aws-eks"
   type          = string
 }
 

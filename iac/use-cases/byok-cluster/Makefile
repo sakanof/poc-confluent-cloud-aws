@@ -57,6 +57,8 @@ MODULES = aws/kms/key										\
 		  confluent/cluster									\
 		  aws/networking/private-link						\
 		  aws/eks											\
+		  aws/iam/roles/subscriber-read						\
+		  aws/iam/roles/subscriber-write					\
 		  confluent/identity-provider						\
 		  confluent/identity-pool-topic-owner				\
 		  confluent/identity-pool-topic-owner-permission	\
@@ -64,6 +66,3 @@ MODULES = aws/kms/key										\
 		  confluent/identity-pool-producer-permission		\
 		  confluent/identity-pool-consumer					\
 		  confluent/identity-pool-consumer-permission
-
-# aws/iam/roles/subscriber-read						\
-# aws/iam/roles/subscriber-write					\
