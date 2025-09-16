@@ -59,6 +59,7 @@ MODULES = aws/kms/key										\
 		  aws/eks											\
 		  aws/iam/roles/subscriber-read						\
 		  aws/iam/roles/subscriber-write					\
+		  aws/ec2/resource-owner/							\
 		  confluent/identity-provider						\
 		  confluent/identity-pool-topic-owner				\
 		  confluent/identity-pool-topic-owner-permission	\

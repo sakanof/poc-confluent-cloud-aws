@@ -23,7 +23,7 @@ data "template_file" "user_data" {
 
     cat <<EOT > /opt/kafka/config/client_sasl_scram.properties
     security.protocol=SASL_SSL
-    sasl.mechanism=SCRAM-SHA-512
+    sasl.mechanism=PLAIN
     sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="${var.client_key}" password="${var.client_secret}";
     EOT
 
