@@ -22,7 +22,7 @@ data "terraform_remote_state" "msk_sg" {
 data "terraform_remote_state" "resource_owner_role" {
   backend = "local"
   config = {
-    path = "../../iam/msk/resource-owner/role/terraform.tfstate"
+    path = "../../iam/msk/topic-owner/role/terraform.tfstate"
   }
 }
 

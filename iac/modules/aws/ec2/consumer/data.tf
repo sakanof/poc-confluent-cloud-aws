@@ -22,7 +22,7 @@ data "terraform_remote_state" "msk_sg" {
 data "terraform_remote_state" "read_role" {
   backend = "local"
   config = {
-    path = "../../iam/msk/subscriber-read/role/terraform.tfstate"
+    path = "../../iam/msk/consumer/role/terraform.tfstate"
   }
 }
 

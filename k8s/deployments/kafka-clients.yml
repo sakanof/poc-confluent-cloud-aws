@@ -4,7 +4,7 @@ metadata:
   name: kafka-producer
   namespace: ${APPLICATION_NAMESPACE}
 spec:
-  serviceAccountName: ${SERVICE_ACCOUNT_WRITE}
+  serviceAccountest-topic: ${SERVICE_ACCOUNT_WRITE}
   containers:
   - name: kafka-client
     image: apache/kafka:latest
@@ -44,7 +44,7 @@ metadata:
   name: kafka-consumer
   namespace: ${APPLICATION_NAMESPACE}
 spec:
-  serviceAccountName: ${SERVICE_ACCOUNT_READ}
+  serviceAccountest-topic: ${SERVICE_ACCOUNT_READ}
   containers:
   - name: kafka-client
     image: apache/kafka:latest
@@ -84,7 +84,7 @@ metadata:
   name: kafka-topic-owner
   namespace: ${APPLICATION_NAMESPACE}
 spec:
-  serviceAccountName: ${SERVICE_ACCOUNT_TOPIC_OWNER}
+  serviceAccountest-topic: ${SERVICE_ACCOUNT_TOPIC_OWNER}
   containers:
   - name: kafka-client
     image: apache/kafka:latest

@@ -1,5 +1,5 @@
 variable "eks_cluster_name" {
   type          = string
-  default       = "poc-aws-msk-eks-cluster"
+  default       = "poc-confluent-cloud-aws"
   description   = "EKS Cluster Name."
 }

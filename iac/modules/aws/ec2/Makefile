@@ -1,3 +1,3 @@
 include ${IAC_DIR}/terraform_modules.mk
 
-MODULES=producer consumer resource-owner msk-console
+MODULES=producer consumer topic-owner msk-console

@@ -27,17 +27,18 @@ module "private_link" {
 
 ## Inputs
 
-- `vpc_id`: VPC ID for endpoint and DNS.
-- `privatelink_service_name`: Service name for PrivateLink (from provider).
-- `subnets_to_privatelink`: Map of AZ IDs to subnet IDs.
-- `dns_domain`: Private DNS domain for Route53 zone/records.
+- `vpc_id`: The ID of the VPC where the PrivateLink endpoints will be created.
+- `private_link_endpoint_service`: The name of the PrivateLink endpoint service to connect to.
+- `subnets_to_privatelink`: Map of availability zone IDs to subnet IDs for PrivateLink endpoint placement.
+- `bootstrap_prefix`: The prefix used for bootstrap servers in the Confluent Cloud configuration.
+- `confluent_dns_domain`: The DNS domain name for the Confluent Cloud environment.
 
 ## Outputs
 
-- `security_group_id`: Security group for PrivateLink traffic.
-- `vpc_endpoint_id`: The AWS PrivateLink VPC endpoint ID.
-- `route53_zone_id`: The Route53 private hosted zone ID.
-- `route53_zone_name`: The DNS zone name.
+- `security_group_id`: The ID of the security group for PrivateLink.
+- `vpc_endpoint_id`: The PrivateLink VPC endpoint ID.
+- `route53_zone_id`: The Route53 Private Hosted Zone ID.
+- `route53_zone_name`: The Route53 Private Hosted Zone name.
 
 ## References
 

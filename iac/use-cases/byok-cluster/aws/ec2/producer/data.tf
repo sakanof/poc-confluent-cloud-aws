@@ -26,9 +26,16 @@ data "terraform_remote_state" "confluent_cluster" {
   }
 }
 
-# data "terraform_remote_state" "role" {
-#   backend = "local"
-#   config = {
-#     path = "../../../main-account-msk-topics/test/roles/resource-owner/terraform.tfstate"
-#   }
-# }
+data "terraform_remote_state" "producer_identity_pool" {
+  backend = "local"
+  config = {
+    path = "../../../confluent/identity-pool-cproducer/terraform.tfstate"
+  }
+}
+
+data "terraform_remote_state" "role" {
+  backend = "local"
+  config = {
+    path = "../../iam/roles/producer/terraform.tfstate"
+  }
+}

@@ -8,7 +8,7 @@ data "terraform_remote_state" "eks" {
 data "terraform_remote_state" "permission_policy" {
   backend = "local"
   config = {
-    path = "../../../../iam/msk/subscriber-read/permission-policy/terraform.tfstate"
+    path = "../../../../iam/msk/consumer/permission-policy/terraform.tfstate"
   }
 }
 

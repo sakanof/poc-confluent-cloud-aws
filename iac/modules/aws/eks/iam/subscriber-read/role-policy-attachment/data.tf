@@ -1,7 +1,7 @@
 data "terraform_remote_state" "policy" {
   backend = "local"
   config = {
-    path = "../../../../iam/msk/subscriber-read/permission-policy/terraform.tfstate"
+    path = "../../../../iam/msk/consumer/permission-policy/terraform.tfstate"
   }
 }
 

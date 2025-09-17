@@ -4,10 +4,10 @@ variable "instance_type" {
   description   = "EC2 Tnstance Type (default: t2.micro)"
 }
 
-# variable "role_name" {
-#   type          = string
-#   description   = "Role Name."
-# }
+variable "role_name" {
+  type          = string
+  description   = "Role Name."
+}
 
 variable "subnet_id" {
   type          = string
@@ -32,7 +32,7 @@ variable "security_groups" {
 
 variable "client_type" {
   type          = string
-  description   = "Client Type (`resource-owner`, `producer`, `consumer` and `monitoring`)."
+  description   = "Client Type (`topic-owner`, `producer`, `consumer` and `monitoring`)."
 }
 
 variable "client_key" {
@@ -43,6 +43,16 @@ variable "client_key" {
 variable "client_secret" {
   type          = string
   description   = "The client secret used for authentication."
+}
+
+variable "cluster_id" {
+  type          = string
+  description   = "The ID of the AWS Confluent Cloud Kafka cluster."
+}
+
+variable "identity_pool_id" {
+  type          = string
+  description   = "Identity Pool ID."
 }
 
 variable "tag_name" {

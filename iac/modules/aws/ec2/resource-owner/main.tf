@@ -9,7 +9,7 @@ data "aws_ami" "amzn-linux-2023-ami" {
 }
 
 resource "aws_iam_instance_profile" "profile" {
-  name = "poc-aws-msk-resource-owner"
+  name = "poc-aws-msk-topic-owner"
   role = data.terraform_remote_state.resource_owner_role.outputs.name
 }
 
@@ -27,7 +27,7 @@ resource "aws_instance" "resource_owner" {
   user_data = templatefile("../shared/user-data.sh", {
     bootstrap_brokers_sasl_iam  = data.terraform_remote_state.msk.outputs.bootstrap_brokers_sasl_iam
     ec2_username                = "ec2-user"
-    client_type                 = "resource-owner"
+    client_type                 = "topic-owner"
   })
 
   security_groups = [
@@ -35,6 +35,6 @@ resource "aws_instance" "resource_owner" {
   ]
 
   tags = {
-    Name = "poc-aws-msk-resource-owner"
+    Name = "poc-aws-msk-topic-owner"
   }
 }

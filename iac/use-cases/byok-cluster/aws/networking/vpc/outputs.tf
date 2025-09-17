@@ -6,8 +6,8 @@ output "azs" {
   value = module.vpc.azs
 }
 
-output "private_azs_map" {
-  value = module.vpc.private_azs_map
+output "private_zones_map" {
+  value = module.vpc.private_zones_map
 }
 
 output "public_subnets" {

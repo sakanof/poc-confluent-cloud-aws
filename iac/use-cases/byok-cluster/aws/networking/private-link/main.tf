@@ -16,5 +16,5 @@ module "privatelink" {
   vpc_id                            = data.terraform_remote_state.vpc.outputs.vpc_id
   private_link_endpoint_service     = data.terraform_remote_state.confluent_network.outputs.private_link_endpoint_service
 
-  subnets_to_privatelink            = data.terraform_remote_state.vpc.outputs.private_azs_map
+  subnets_to_privatelink            = data.terraform_remote_state.vpc.outputs.private_zones_map
 }

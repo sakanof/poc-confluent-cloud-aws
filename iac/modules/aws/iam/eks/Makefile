@@ -1,3 +1,3 @@
 include ${IAC_DIR}/terraform_modules.mk
 
-MODULES=admin resource-owner eks eks-nodes
+MODULES=admin topic-owner eks eks-nodes

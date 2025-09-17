@@ -1,6 +1,14 @@
 module "vpc" {
-  source     = "../../../../../modules/aws/networking/vpc/"
-  # vpc_cidr   = "10.0.0.0/16"
-  # subnets    = ["10.0.1.0/24", "10.0.2.0/24"]
-  # enable_nat = true
+  source                  = "../../../../../modules/aws/networking/vpc/"
+
+  vpc_name                = "poc-confluent-cloud-aws"
+  eks_name                = "poc-confluent-cloud-aws"
+
+  cidr_block              = "10.0.0.0/16"
+  public_az1_cidr_block   = "10.0.0.0/20"
+  public_az2_cidr_block   = "10.0.16.0/20"
+  public_az3_cidr_block   = "10.0.32.0/20"
+  private_az1_cidr_block  = "10.0.48.0/20"
+  private_az2_cidr_block  = "10.0.64.0/20"
+  private_az3_cidr_block  = "10.0.80.0/20"
 }

@@ -9,7 +9,7 @@ resource "aws_subnet" "public_az1" {
   tags = {
     "Name"                                      = "public-${data.aws_availability_zones.azs.names[0]}"
     "kubernetes.io/role/internal-elb"           = "1"
-    "kubernetes.io/cluster/${local.eks_name}"   = "owned" # owned || shared
+    "kubernetes.io/cluster/${var.eks_name}"   = "owned" # owned || shared
   }
 }
 
@@ -23,7 +23,7 @@ resource "aws_subnet" "public_az2" {
   tags = {
     "Name"                                      = "public-${data.aws_availability_zones.azs.names[1]}"
     "kubernetes.io/role/internal-elb"           = "1"
-    "kubernetes.io/cluster/${local.eks_name}"   = "owned" # owned || shared
+    "kubernetes.io/cluster/${var.eks_name}"   = "owned" # owned || shared
   }
 }
 
@@ -37,7 +37,7 @@ resource "aws_subnet" "public_az3" {
   tags = {
     "Name"                                      = "public-${data.aws_availability_zones.azs.names[2]}"
     "kubernetes.io/role/internal-elb"           = "1"
-    "kubernetes.io/cluster/${local.eks_name}"   = "owned" # owned || shared
+    "kubernetes.io/cluster/${var.eks_name}"   = "owned" # owned || shared
   }
 }
 
@@ -51,7 +51,7 @@ resource "aws_subnet" "private_az1" {
   tags = {
     "Name"                                      = "private-${data.aws_availability_zones.azs.names[0]}"
     "kubernetes.io/role/internal-elb"           = "1"
-    "kubernetes.io/cluster/${local.eks_name}"   = "owned" # owned || shared
+    "kubernetes.io/cluster/${var.eks_name}"   = "owned" # owned || shared
   }
 }
 
@@ -63,7 +63,7 @@ resource "aws_subnet" "private_az2" {
   tags = {
     "Name"                                      = "private-${data.aws_availability_zones.azs.names[1]}"
     "kubernetes.io/role/internal-elb"           = "1"
-    "kubernetes.io/cluster/${local.eks_name}"   = "owned" # owned || shared
+    "kubernetes.io/cluster/${var.eks_name}"   = "owned" # owned || shared
   }
 }
 
@@ -75,6 +75,6 @@ resource "aws_subnet" "private_az3" {
   tags = {
     "Name"                                      = "private-${data.aws_availability_zones.azs.names[2]}"
     "kubernetes.io/role/internal-elb"           = "1"
-    "kubernetes.io/cluster/${local.eks_name}"   = "owned" # owned || shared
+    "kubernetes.io/cluster/${var.eks_name}"   = "owned" # owned || shared
   }
 }

@@ -23,10 +23,10 @@ echo "export BOOTSTRAP_SERVERS_SASL_IAM=${bootstrap_brokers_sasl_iam}" >> /home/
 echo "export CLASSPATH=\"/opt/kafka/libs/\"" >> /home/${ec2_username}/.bash_profile
 
 if [[ "${client_type}" == "consumer" ]]; then
-    echo "alias start_consumer=\"/opt/kafka/bin/kafka-console-consumer.sh --topic tname --group gname --bootstrap-server ${bootstrap_brokers_sasl_iam} --consumer.config /opt/kafka/config/client_sasl_iam.properties\"" >> /home/${ec2_username}/.bash_profile
+    echo "alias start_consumer=\"/opt/kafka/bin/kafka-console-consumer.sh --topic test-topic --group gname --bootstrap-server ${bootstrap_brokers_sasl_iam} --consumer.config /opt/kafka/config/client_sasl_iam.properties\"" >> /home/${ec2_username}/.bash_profile
 elif [[ "${client_type}" == "producer" ]]; then
-    echo "alias start_producer=\"/opt/kafka/bin/kafka-console-producer.sh --topic tname --bootstrap-server ${bootstrap_brokers_sasl_iam} --producer.config /opt/kafka/config/client_sasl_iam.properties\"" >> /home/${ec2_username}/.bash_profile
-elif [[ "${client_type}" == "resource-owner" ]]; then
-    echo "alias create_topic=\"/opt/kafka/bin/kafka-topics.sh --create --topic tname --partitions 2 --replication-factor 2 --bootstrap-server ${bootstrap_brokers_sasl_iam}\"" >> /home/${ec2_username}/.bash_profile
+    echo "alias start_producer=\"/opt/kafka/bin/kafka-console-producer.sh --topic test-topic --bootstrap-server ${bootstrap_brokers_sasl_iam} --producer.config /opt/kafka/config/client_sasl_iam.properties\"" >> /home/${ec2_username}/.bash_profile
+elif [[ "${client_type}" == "topic-owner" ]]; then
+    echo "alias create_topic=\"/opt/kafka/bin/kafka-topics.sh --create --topic test-topic --partitions 2 --replication-factor 2 --bootstrap-server ${bootstrap_brokers_sasl_iam}\"" >> /home/${ec2_username}/.bash_profile
     echo "alias list_topics=\"/opt/kafka/bin/kafka-topics.sh --list --bootstrap-server ${bootstrap_brokers_sasl_iam}\"" >> /home/${ec2_username}/.bash_profile
 fi

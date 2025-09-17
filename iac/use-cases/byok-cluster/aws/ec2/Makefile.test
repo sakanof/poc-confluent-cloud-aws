@@ -14,13 +14,13 @@ SERVICE_ACCOUNT_WRITE := poc-confluent-cloud-aws-write
 # Terraform Outputs
 BOOTSTRAP_SERVERS_SASL_IAM := $(shell jq -r '.outputs.bootstrap_endpoint.value' ../../confluent/cluster/terraform.tfstate)
 
-EC2_PRODUCER_DNS       := $(shell jq -r '.outputs.public_dns.value' ./subscriber-write/terraform.tfstate)
-EC2_CONSUMER_DNS       := $(shell jq -r '.outputs.public_dns.value' ./subscriber-read/terraform.tfstate)
-EC2_RESOURCE_OWNER_DNS := $(shell jq -r '.outputs.public_dns.value' ./resource-owner/terraform.tfstate)
+EC2_PRODUCER_DNS       := $(shell jq -r '.outputs.public_dns.value' ./producer/terraform.tfstate)
+EC2_CONSUMER_DNS       := $(shell jq -r '.outputs.public_dns.value' ./consumer/terraform.tfstate)
+EC2_RESOURCE_OWNER_DNS := $(shell jq -r '.outputs.public_dns.value' ./topic-owner/terraform.tfstate)
 EC2_MSK_CONSOLE        := $(shell jq -r '.outputs.public_dns.value' ./iac/modules/ec2/msk-console/terraform.tfstate)
 
 # Default topic and group name (override if needed)
-TOPIC_NAME ?= tname
+TOPIC_NAME ?= test-topic
 GROUP_NAME ?= gname
 
 # SSH Command
@@ -31,7 +31,7 @@ SSH_CMD = ssh -i "${SSH_KEY}" ec2-user@
 # =============================================================
 
 .PHONY: run-producer run-consumer create-topic \
-        ssh-resource-owner ssh-producer ssh-consumer ssh-msk-console
+        ssh-topic-owner ssh-producer ssh-consumer ssh-msk-console
 
 run-producer:
 	@$(SSH_CMD)"${EC2_PRODUCER_DNS}" \
@@ -58,7 +58,7 @@ create-topic:
 		--bootstrap-server ${BOOTSTRAP_SERVERS_SASL_IAM}"
 
 # SSH Shortcuts
-ssh-resource-owner:
+ssh-topic-owner:
 	$(SSH_CMD)"${EC2_RESOURCE_OWNER_DNS}"
 
 ssh-producer:
