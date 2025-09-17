@@ -7,7 +7,7 @@ module "ec2_instance" {
   bootstrap_server  = data.terraform_remote_state.confluent_cluster.outputs.bootstrap_endpoint
   cluster_id        = data.terraform_remote_state.confluent_cluster.outputs.cluster_id
   identity_pool_id  = data.terraform_remote_state.consumer_identity_pool.outputs.id
-  tag_name          = "poc-aws-msk-topic-owner"
+  tag_name          = "poc-aws-msk-consumer"
   client_type       = "consumer"
   client_key        = var.client_key
   client_secret     = var.client_secret

@@ -33,7 +33,7 @@ create-service-accounts:
 	SERVICE_ACCOUNT_TOPIC_OWNER=${SERVICE_ACCOUNT_TOPIC_OWNER}				\
 	SERVICE_ACCOUNT_READ=${SERVICE_ACCOUNT_READ}							\
 	SERVICE_ACCOUNT_WRITE=${SERVICE_ACCOUNT_WRITE}							\
-	EKS_TOPIC_OWNER_ROLE_ARN=${EKS_WRITE_ROLE_ARN}							\
+	EKS_TOPIC_OWNER_ROLE_ARN=${EKS_TOPIC_OWNER_ROLE_ARN}					\
 	EKS_READ_ROLE_ARN=${EKS_READ_ROLE_ARN}									\
 	EKS_WRITE_ROLE_ARN=${EKS_WRITE_ROLE_ARN}								\
 		envsubst < ./deployments/service-account.yml | kubectl apply -f -
@@ -41,6 +41,7 @@ create-service-accounts:
 get-service-accounts:
 	kubectl get sa --namespace ${APPLICATION_NAMESPACE} ${SERVICE_ACCOUNT_READ} -o yaml
 	kubectl get sa --namespace ${APPLICATION_NAMESPACE} ${SERVICE_ACCOUNT_WRITE} -o yaml
+	kubectl get sa --namespace ${APPLICATION_NAMESPACE} ${SERVICE_ACCOUNT_TOPIC_OWNER} -o yaml
 
 delete-service-accounts:
 	kubectl delete sa --namespace ${APPLICATION_NAMESPACE} ${SERVICE_ACCOUNT_READ}

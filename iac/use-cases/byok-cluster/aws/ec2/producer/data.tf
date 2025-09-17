@@ -29,7 +29,7 @@ data "terraform_remote_state" "confluent_cluster" {
 data "terraform_remote_state" "producer_identity_pool" {
   backend = "local"
   config = {
-    path = "../../../confluent/identity-pool-cproducer/terraform.tfstate"
+    path = "../../../confluent/identity-pool-producer/terraform.tfstate"
   }
 }
 

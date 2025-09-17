@@ -10,6 +10,14 @@ output "private_route_table_id" {
   value = aws_route_table.private.id
 }
 
+output "azs" {
+  value = [
+    data.aws_availability_zones.azs.names[0],
+    data.aws_availability_zones.azs.names[1],
+    data.aws_availability_zones.azs.names[2]
+  ]
+}
+
 output "private_zones_map" {
   description = "Map of AZ name to subnet ID"
   value = zipmap(

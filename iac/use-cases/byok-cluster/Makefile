@@ -14,13 +14,13 @@ MODULES = aws/kms/key										\
 		  aws/iam/roles/topic-owner							\
 		  aws/iam/roles/consumer							\
 		  aws/iam/roles/producer							\
-		  aws/ec2/topic-owner								\
-		  aws/ec2/consumer									\
-		  aws/ec2/producer									\
 		  confluent/identity-provider						\
 		  confluent/identity-pool-topic-owner				\
 		  confluent/identity-pool-topic-owner-permission	\
 		  confluent/identity-pool-producer					\
 		  confluent/identity-pool-producer-permission		\
 		  confluent/identity-pool-consumer					\
-		  confluent/identity-pool-consumer-permission
+		  confluent/identity-pool-consumer-permission		\
+		  aws/ec2/topic-owner								\
+		  aws/ec2/consumer									\
+		  aws/ec2/producer
