@@ -3,6 +3,6 @@ module "identity_pool" {
 
   name                  = var.name
   identity_provider_id  = data.terraform_remote_state.identity_provider.outputs.id
-  namespace             = "test"
+  namespace             = "poc-confluent-cloud-aws"
   service_account       = "topic-owner"
 }

@@ -30,20 +30,16 @@ data "template_file" "user_data" {
     echo "export var.bootstrap_serverS_SASL_IAM=${var.bootstrap_server}" >> /home/ec2-user/.bash_profile
     echo "export CLASSPATH=\"/opt/kafka/libs/\"" >> /home/ec2-user/.bash_profile
     
-    if [[ "${var.client_type}" == "consumer" ]]; then
         echo "alias start_consumer=\"/opt/kafka/bin/kafka-console-consumer.sh --topic tname --group gname --bootstrap-server ${var.bootstrap_server} --consumer.config /opt/kafka/config/client_sasl_iam.properties\"" >> /home/ec2-user/.bash_profile
 
         echo "alias start_consumer_sasl_scram=\"/opt/kafka/bin/kafka-console-consumer.sh --topic tname --group gname --bootstrap-server ${var.bootstrap_server} --consumer.config /opt/kafka/config/client_sasl_scram.properties\"" >> /home/ec2-user/.bash_profile
-    elif [[ "${var.client_type}" == "producer" ]]; then
         echo "alias start_producer=\"/opt/kafka/bin/kafka-console-producer.sh --topic tname --bootstrap-server ${var.bootstrap_server} --producer.config /opt/kafka/config/client_sasl_iam.properties\"" >> /home/ec2-user/.bash_profile
 
         echo "alias start_producer_sasl_scram=\"/opt/kafka/bin/kafka-console-producer.sh --topic tname --bootstrap-server ${var.bootstrap_server} --producer.config /opt/kafka/config/client_sasl_scram.properties\"" >> /home/ec2-user/.bash_profile
-    elif [[ "${var.client_type}" == "resource-owner" ]]; then
         echo "alias create_topic=\"/opt/kafka/bin/kafka-topics.sh --create --topic tname --partitions 2 --replication-factor 3 --bootstrap-server ${var.bootstrap_server}\"" >> /home/ec2-user/.bash_profile
         echo "alias list_topics=\"/opt/kafka/bin/kafka-topics.sh --list --bootstrap-server ${var.bootstrap_server}\"" >> /home/ec2-user/.bash_profile
 
         echo "alias create_topic_sasl_scra=\"/opt/kafka/bin/kafka-topics.sh --create --topic tname --partitions 2 --replication-factor 3 --bootstrap-server ${var.bootstrap_server} --command-config /opt/kafka/config/client_sasl_scram.properties\"" >> /home/ec2-user/.bash_profile
         echo "alias list_topics_sasl_scra=\"/opt/kafka/bin/kafka-topics.sh --list --bootstrap-server ${var.bootstrap_server} --command-config /opt/kafka/config/client_sasl_scram.properties\"" >> /home/ec2-user/.bash_profile
-    fi
   EOF
 }

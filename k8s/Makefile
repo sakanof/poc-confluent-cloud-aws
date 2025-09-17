@@ -2,6 +2,7 @@ APPLICATION_NAMESPACE=poc-confluent-cloud-aws
 SERVICE_ACCOUNT_TOPIC_OWNER=topic-owner
 SERVICE_ACCOUNT_READ=read
 SERVICE_ACCOUNT_WRITE=write
+TEST_TOPIC_NAME=tname
 
 EKS_CLUSTER_NAME 				:= $(shell jq -r '.outputs.id.value' ../iac/use-cases/byok-cluster/aws/eks/cluster/terraform.tfstate)
 CLUSTER_ID						:= $(shell jq -r '.outputs.cluster_id.value' ../iac/use-cases/byok-cluster/confluent/cluster/terraform.tfstate)
@@ -11,9 +12,9 @@ EKS_TOPIC_OWNER_ROLE_ARN		:= $(shell jq -r '.outputs.arn.value' ../iac/use-cases
 EKS_WRITE_ROLE_ARN				:= $(shell jq -r '.outputs.arn.value' ../iac/use-cases/byok-cluster/aws/iam/roles/subscriber-write/terraform.tfstate)
 EKS_READ_ROLE_ARN				:= $(shell jq -r '.outputs.arn.value' ../iac/use-cases/byok-cluster/aws/iam/roles/subscriber-read/terraform.tfstate)
 
-CONSUMER_IDENTITY_POOL_ID		:= $(shell jq -r '.outputs.arn.value' ../iac/use-cases/byok-cluster/confluent/identity-pool-consumer/terraform.tfstate)
-PRODUCER_IDENTITY_POOL_ID		:= $(shell jq -r '.outputs.arn.value' ../iac/use-cases/byok-cluster/confluent/identity-pool-producer/terraform.tfstate)
-TOPIC_OWNER_IDENTITY_POOL_ID	:= $(shell jq -r '.outputs.arn.value' ../iac/use-cases/byok-cluster/confluent/identity-pool-topic-owner/terraform.tfstate)
+CONSUMER_IDENTITY_POOL_ID		:= $(shell jq -r '.outputs.id.value' ../iac/use-cases/byok-cluster/confluent/identity-pool-consumer/terraform.tfstate)
+PRODUCER_IDENTITY_POOL_ID		:= $(shell jq -r '.outputs.id.value' ../iac/use-cases/byok-cluster/confluent/identity-pool-producer/terraform.tfstate)
+TOPIC_OWNER_IDENTITY_POOL_ID	:= $(shell jq -r '.outputs.id.value' ../iac/use-cases/byok-cluster/confluent/identity-pool-topic-owner/terraform.tfstate)
 
 get-pods:
 	kubectl get pods --namespace ${APPLICATION_NAMESPACE}
@@ -35,7 +36,6 @@ create-service-accounts:
 	EKS_TOPIC_OWNER_ROLE_ARN=${EKS_WRITE_ROLE_ARN}							\
 	EKS_READ_ROLE_ARN=${EKS_READ_ROLE_ARN}									\
 	EKS_WRITE_ROLE_ARN=${EKS_WRITE_ROLE_ARN}								\
-	MANAGED_IDENTITY_CLIENT_ID=${MANAGED_IDENTITY_CLIENT_ID}				\
 		envsubst < ./deployments/service-account.yml | kubectl apply -f -
 
 get-service-accounts:
@@ -47,9 +47,15 @@ delete-service-accounts:
 	kubectl delete sa --namespace ${APPLICATION_NAMESPACE} ${SERVICE_ACCOUNT_WRITE}
 
 create-client-properties-configmap:
-	envsubst < ./deployments/client-properties.yml | kubectl apply -f -
+	APPLICATION_NAMESPACE=${APPLICATION_NAMESPACE}							\
+	CLUSTER_ID=${CLUSTER_ID}												\
+	TOPIC_OWNER_IDENTITY_POOL_ID=${TOPIC_OWNER_IDENTITY_POOL_ID}			\
+	CONSUMER_IDENTITY_POOL_ID=${CONSUMER_IDENTITY_POOL_ID}					\
+	PRODUCER_IDENTITY_POOL_ID=${PRODUCER_IDENTITY_POOL_ID}					\
+		envsubst < ./deployments/client-properties.yml | kubectl apply -f -
 
 deploy-kafka-clients: create-client-properties-configmap
+	TEST_TOPIC_NAME=${TEST_TOPIC_NAME}										\
 	APPLICATION_NAMESPACE=${APPLICATION_NAMESPACE}							\
 	SERVICE_ACCOUNT_READ=${SERVICE_ACCOUNT_READ} 							\
 	SERVICE_ACCOUNT_WRITE=${SERVICE_ACCOUNT_WRITE}							\
@@ -61,6 +67,7 @@ delete-kafka-clients:
 	kubectl delete pod --namespace ${APPLICATION_NAMESPACE} kafka-producer kafka-consumer kafka-topic-owner
 
 check-kafka-clients-identities:
+	kubectl exec --namespace ${APPLICATION_NAMESPACE} -it kafka-topic-owner -- env
 	kubectl exec --namespace ${APPLICATION_NAMESPACE} -it kafka-producer -- env
 	kubectl exec --namespace ${APPLICATION_NAMESPACE} -it kafka-consumer -- env
 
