@@ -1,15 +1,19 @@
-APPLICATION_NAMESPACE=subscriber
+APPLICATION_NAMESPACE=poc-confluent-cloud-aws
+SERVICE_ACCOUNT_TOPIC_OWNER=topic-owner
 SERVICE_ACCOUNT_READ=read
-SERVICE_ACCOUNT_TOPIC_OWNER=topic-owner-sa
 SERVICE_ACCOUNT_WRITE=write
 
-EKS_CLUSTER_NAME = $(shell jq -r '.outputs.id.value' ../iac/use-cases/byok-cluster/aws/eks/cluster/terraform.tfstate)
+EKS_CLUSTER_NAME 				:= $(shell jq -r '.outputs.id.value' ../iac/use-cases/byok-cluster/aws/eks/cluster/terraform.tfstate)
 CLUSTER_ID						:= $(shell jq -r '.outputs.cluster_id.value' ../iac/use-cases/byok-cluster/confluent/cluster/terraform.tfstate)
 BOOTSTRAP_SERVERS				:= $(shell jq -r '.outputs.bootstrap_endpoint.value' ../iac/use-cases/byok-cluster/confluent/cluster/terraform.tfstate)
 
-# EKS_TOPIC_OWNER_ROLE_ARN=$(shell jq -r '.outputs.arn.value' ../iac/use-cases/byok-cluster/aws/iam/roles/topic-owner/terraform.tfstate)
-EKS_WRITE_ROLE_ARN=$(shell jq -r '.outputs.arn.value' ../iac/use-cases/byok-cluster/aws/iam/roles/subscriber-write/terraform.tfstate)
-EKS_READ_ROLE_ARN=$(shell jq -r '.outputs.arn.value' ../iac/use-cases/byok-cluster/aws/iam/roles/subscriber-read/terraform.tfstate)
+EKS_TOPIC_OWNER_ROLE_ARN		:= $(shell jq -r '.outputs.arn.value' ../iac/use-cases/byok-cluster/aws/iam/roles/topic-owner/terraform.tfstate)
+EKS_WRITE_ROLE_ARN				:= $(shell jq -r '.outputs.arn.value' ../iac/use-cases/byok-cluster/aws/iam/roles/subscriber-write/terraform.tfstate)
+EKS_READ_ROLE_ARN				:= $(shell jq -r '.outputs.arn.value' ../iac/use-cases/byok-cluster/aws/iam/roles/subscriber-read/terraform.tfstate)
+
+CONSUMER_IDENTITY_POOL_ID		:= $(shell jq -r '.outputs.arn.value' ../iac/use-cases/byok-cluster/confluent/identity-pool-consumer/terraform.tfstate)
+PRODUCER_IDENTITY_POOL_ID		:= $(shell jq -r '.outputs.arn.value' ../iac/use-cases/byok-cluster/confluent/identity-pool-producer/terraform.tfstate)
+TOPIC_OWNER_IDENTITY_POOL_ID	:= $(shell jq -r '.outputs.arn.value' ../iac/use-cases/byok-cluster/confluent/identity-pool-topic-owner/terraform.tfstate)
 
 get-pods:
 	kubectl get pods --namespace ${APPLICATION_NAMESPACE}

@@ -22,15 +22,19 @@ metadata:
 data:
   client_iam.properties: |
     security.protocol=SASL_SSL
-    sasl.oauthbearer.token.endpoint.url=http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=${APPLICATION_CLIENT_ID}
-    sasl.login.callback.handler.class=io.confluent.oauth.azure.managedidentity.OAuthBearerLoginCallbackHandler
     sasl.mechanism=OAUTHBEARER
-    sasl.jaas.config= \
-       org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required \
-           clientId='ignored' \
-           clientSecret='ignored' \
-           extension_logicalCluster='${CLUSTER_ID}' \
-           extension_identityPoolId='${PRODUCER_IDENTITY_POOL_ID}';
+    #sasl.oauthbearer.token.file=/var/run/secrets/pods.eks.amazonaws.com/serviceaccount/eks-pod-identity-token
+    sasl.login.callback.handler.class=io.confluent.oauth.kubernetes.OAuthBearerLoginCallbackHandler
+    sasl.jaas.config=org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;
+    sasl.oauthbearer.extensions=logicalCluster='${CLUSTER_ID},identityPoolId='${PRODUCER_IDENTITY_POOL_ID}'
+    # sasl.oauthbearer.token.endpoint.url=http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=${APPLICATION_CLIENT_ID}
+    # sasl.login.callback.handler.class=io.confluent.oauth.azure.managedidentity.OAuthBearerLoginCallbackHandler
+    # sasl.jaas.config= \
+    #    org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required \
+    #        clientId='ignored' \
+    #        clientSecret='ignored' \
+    #        extension_logicalCluster='${CLUSTER_ID}' \
+    #        extension_identityPoolId='${PRODUCER_IDENTITY_POOL_ID}';
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -40,15 +44,21 @@ metadata:
 data:
   client_iam.properties: |
     security.protocol=SASL_SSL
-    sasl.oauthbearer.token.endpoint.url=http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=${APPLICATION_CLIENT_ID}
-    sasl.login.callback.handler.class=io.confluent.oauth.azure.managedidentity.OAuthBearerLoginCallbackHandler
     sasl.mechanism=OAUTHBEARER
-    sasl.jaas.config= \
-       org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required \
-           clientId='ignored' \
-           clientSecret='ignored' \
-           extension_logicalCluster='${CLUSTER_ID}' \
-           extension_identityPoolId='${CONSUMER_IDENTITY_POOL_ID}';
+    #sasl.oauthbearer.token.file=/var/run/secrets/pods.eks.amazonaws.com/serviceaccount/eks-pod-identity-token
+    sasl.login.callback.handler.class=io.confluent.oauth.kubernetes.OAuthBearerLoginCallbackHandler
+    sasl.jaas.config=org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;
+    sasl.oauthbearer.extensions=logicalCluster='${CLUSTER_ID},identityPoolId='${CONSUMER_IDENTITY_POOL_ID}'
+    # security.protocol=SASL_SSL
+    # sasl.oauthbearer.token.endpoint.url=http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=${APPLICATION_CLIENT_ID}
+    # sasl.login.callback.handler.class=io.confluent.oauth.azure.managedidentity.OAuthBearerLoginCallbackHandler
+    # sasl.mechanism=OAUTHBEARER
+    # sasl.jaas.config= \
+    #    org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required \
+    #        clientId='ignored' \
+    #        clientSecret='ignored' \
+    #        extension_logicalCluster='${CLUSTER_ID}' \
+    #        extension_identityPoolId='${CONSUMER_IDENTITY_POOL_ID}';
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -58,12 +68,18 @@ metadata:
 data:
   client_iam.properties: |
     security.protocol=SASL_SSL
-    sasl.oauthbearer.token.endpoint.url=http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=${APPLICATION_CLIENT_ID}
-    sasl.login.callback.handler.class=io.confluent.oauth.azure.managedidentity.OAuthBearerLoginCallbackHandler
     sasl.mechanism=OAUTHBEARER
-    sasl.jaas.config= \
-       org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required \
-           clientId='ignored' \
-           clientSecret='ignored' \
-           extension_logicalCluster='${CLUSTER_ID}' \
-           extension_identityPoolId='${TOPIC_OWNER_IDENTITY_POOL_ID}';
+    #sasl.oauthbearer.token.file=/var/run/secrets/eks.amazonaws.com/serviceaccount/token
+    sasl.login.callback.handler.class=io.confluent.oauth.kubernetes.OAuthBearerLoginCallbackHandler
+    sasl.jaas.config=org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;
+    sasl.oauthbearer.extensions=logicalCluster='${CLUSTER_ID},identityPoolId='${TOPIC_OWNER_IDENTITY_POOL_ID}'
+    # security.protocol=SASL_SSL
+    # sasl.oauthbearer.token.endpoint.url=http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=${APPLICATION_CLIENT_ID}
+    # sasl.login.callback.handler.class=io.confluent.oauth.azure.managedidentity.OAuthBearerLoginCallbackHandler
+    # sasl.mechanism=OAUTHBEARER
+    # sasl.jaas.config= \
+    #    org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required \
+    #        clientId='ignored' \
+    #        clientSecret='ignored' \
+    #        extension_logicalCluster='${CLUSTER_ID}' \
+    #        extension_identityPoolId='${TOPIC_OWNER_IDENTITY_POOL_ID}';
